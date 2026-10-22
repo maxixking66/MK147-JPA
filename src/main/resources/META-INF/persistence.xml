@@ -4,6 +4,8 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
              version="3.2">
     <persistence-unit name="default">
+        <class>ir.maktabsharif.jpa.entities.User</class>
+
         <properties>
             <property name="jakarta.persistence.jdbc.url"
                       value="jdbc:postgresql://localhost:5432/postgres?currentSchema=mk147_jpa"/>
@@ -11,6 +13,7 @@
             <property name="jakarta.persistence.jdbc.password" value="123456789"/>
 
             <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.show_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
