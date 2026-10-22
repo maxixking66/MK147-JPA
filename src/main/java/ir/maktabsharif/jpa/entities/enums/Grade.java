@@ -1,14 +1,36 @@
 package ir.maktabsharif.jpa.entities.enums;
 
-public enum Grade {
-    VERY_GOOD, VERY_BAD, BAD, GOOD;
+public enum Grade implements Test {
+    VERY_GOOD(100) {
+        public Integer getNumericLevel() {
+            return 10;
+        }
+    },
+    VERY_BAD(-100) {
+        public Integer getNumericLevel() {
+            return -10;
+        }
+    },
+    BAD(0) {
+        public Integer getNumericLevel() {
+            return 5;
+        }
+    },
+    GOOD(50) {
+    };
+
+    private final int level;
+
+    Grade(int level) {
+        this.level = level;
+    }
 
     public Integer getNumericLevel() {
-        return switch (this) {
-            case VERY_GOOD -> 10;
-            case VERY_BAD -> 0;
-            case BAD -> 3;
-            case GOOD -> 7;
-        };
+        return this.level;
     }
+
+}
+
+interface Test {
+    Integer getNumericLevel();
 }
