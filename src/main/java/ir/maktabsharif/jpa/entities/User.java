@@ -1,6 +1,10 @@
 package ir.maktabsharif.jpa.entities;
 
+import ir.maktabsharif.jpa.entities.enums.Grade;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.ZonedDateTime;
 
@@ -10,6 +14,9 @@ import java.time.ZonedDateTime;
         indexes = @Index(name = User.USERNAME_PASSWORD_INDEX_NAME,
                 columnList = User.USERNAME_PASSWORD_INDEX)
 )
+@Setter
+@Getter
+@NoArgsConstructor
 public class User {
 
     public static final String TABLE_NAME = "users";
@@ -21,8 +28,13 @@ public class User {
     public static final String USERNAME_PASSWORD_INDEX_NAME = "users_username_password_index_name";
     public static final String USERNAME_PASSWORD_INDEX = USERNAME + "," + PASSWORD;
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     @Id
-//    @GeneratedValue
+    @GeneratedValue
     private Long id;
 
     @Column(length = 50)
@@ -51,83 +63,6 @@ public class User {
     @Column(name = LAST_UPDATE_DATE)
     private ZonedDateTime lastUpdateDate;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
-    public ZonedDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(ZonedDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public ZonedDateTime getLastUpdateDate() {
-        return lastUpdateDate;
-    }
-
-    public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 }
