@@ -16,28 +16,17 @@
         <postgres.version>42.7.14</postgres.version>
     </properties>
 
-    <!--    src/main/java   application code-->
-    <!--    src/main/resources   config files (persistence.xml)-->
-    <!--    src/test/java   test code-->
-    <!--    src/test/resources   test config files-->
-    <!--    target/      build output-->
-
     <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgres.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>jakarta.persistence</groupId>-->
-        <!--            <artifactId>jakarta.persistence-api</artifactId>-->
-        <!--            <version>3.2.0</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.hibernate.orm</groupId>-->
-        <!--            <artifactId>hibernate-core</artifactId>-->
-        <!--            <version>7.4.13.Final</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>7.4.13.Final</version>
+        </dependency>
     </dependencies>
 
 
