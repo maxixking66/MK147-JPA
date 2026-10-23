@@ -1,14 +1,12 @@
 package ir.maktabsharif.jpa;
 
 import ir.maktabsharif.jpa.entities.User;
-import ir.maktabsharif.jpa.entities.enums.Grade;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 public class JpaApplication {
 
@@ -17,21 +15,18 @@ public class JpaApplication {
             EntityManager em = emf.createEntityManager();
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
+//            entity state -> transient/new
             User user = new User("asgari", "asgari123456789");
+            System.out.println("em.contains before persist: " + em.contains(user));
+            em.persist(user);
+            System.out.println("em.contains after persist: " + em.contains(user));
+//            entity state -> managed
             user.setFirstname("mohsen");
             user.setLastname("asgari");
-            user.setUsername("asgari");
-            user.setPassword("asgari123456789");
             user.setIsActive(true);
             user.setCreatedDate(ZonedDateTime.now());
-            user.setGrade(Grade.VERY_BAD);
-            em.persist(user);
+            System.out.println(user.getId());
             transaction.commit();
-
-            List<User> fromUser = em.createQuery("from User", User.class)
-                    .getResultList();
-
-            System.out.println(fromUser.size());
         }
     }
 }

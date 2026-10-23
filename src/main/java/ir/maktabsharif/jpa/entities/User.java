@@ -65,4 +65,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Grade grade;
+
+    @Transient
+    private String transientField;
 }
