@@ -22,21 +22,17 @@ public class User extends BaseDomain<Long> {
 
     public static final String TABLE_NAME = "users";
     public static final String IS_ACTIVE = "is_active";
-    public static final String CREATED_DATE = "created_date";
     public static final String LAST_UPDATE_DATE = "last_update_date";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String USERNAME_PASSWORD_INDEX_NAME = "users_username_password_index_name";
     public static final String USERNAME_PASSWORD_INDEX = USERNAME + "," + PASSWORD;
+    public static final String POSTAL_CODE = "postal_code";
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
-
-//    @Id
-//    @GeneratedValue
-//    private Long id;
 
     @Column(length = 50)
     private String firstname;
@@ -58,9 +54,6 @@ public class User extends BaseDomain<Long> {
     @Column(name = IS_ACTIVE)
     private Boolean isActive;
 
-    @Column(name = CREATED_DATE)
-    private ZonedDateTime createdDate;
-
     @Column(name = LAST_UPDATE_DATE)
     private ZonedDateTime lastUpdateDate;
 
@@ -69,4 +62,8 @@ public class User extends BaseDomain<Long> {
 
     @Transient
     private String transientField;
+
+    @Embedded
+    private Address address;
+
 }
