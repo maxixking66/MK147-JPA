@@ -1,8 +1,10 @@
 package ir.maktabsharif.jpa;
 
+import ir.maktabsharif.jpa.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -12,16 +14,10 @@ public class JpaApplication {
         try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("default")) {
             EntityManager em = emf.createEntityManager();
 
-            List<NameProjection> fromUser = em.createQuery("select u.firstname, u.lastname from User u", NameProjection.class)
-                    .getResultList();
-
-
-            NameProjection nameProjection = fromUser.getFirst();
-            nameProjection.firstname();
-            System.out.println(fromUser);
+            TypedQuery<User> query = em.createQuery("from User u where u.username = ?1", User.class);
+            query.setParameter(1, "asgari");
+            List<User> resultList = query.getResultList();
+            System.out.println(resultList.getFirst());
         }
-    }
-
-    public record NameProjection(String firstname, String lastname) {
     }
 }
