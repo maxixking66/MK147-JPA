@@ -66,4 +66,8 @@ public class User extends BaseDomain<Long> {
     @Embedded
     private Address address;
 
+    @OneToOne
+//    @JoinColumn(name = "w_id")
+    private Wallet wallet;
+
 }
