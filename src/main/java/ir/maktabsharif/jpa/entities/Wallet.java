@@ -2,12 +2,14 @@ package ir.maktabsharif.jpa.entities;
 
 import ir.maktabsharif.jpa.entities.base.BaseDomain;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @Table(name = Wallet.TABLE_NAME)
@@ -22,8 +24,8 @@ public class Wallet extends BaseDomain<Long> {
 
     private Long credit;
 
-    @OneToOne(mappedBy = "wallet")
-    private User user;
+    @OneToMany(mappedBy = "wallet")
+    private Set<User> users;
 
     @Transient
     private Long total;
