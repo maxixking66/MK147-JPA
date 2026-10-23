@@ -67,8 +67,8 @@ public class User extends BaseDomain<Long> {
     @Embedded
     private Address address;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
+    @ManyToMany
+    @JoinTable(name = "us_ws", joinColumns = @JoinColumn(name = "u_username", referencedColumnName = "username"), inverseJoinColumns = @JoinColumn(name = "w_id"))
     private Set<Wallet> wallets;
 
 }
