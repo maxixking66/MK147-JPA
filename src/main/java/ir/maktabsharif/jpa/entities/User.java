@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Entity
 @Table(
@@ -66,8 +67,8 @@ public class User extends BaseDomain<Long> {
     @Embedded
     private Address address;
 
-    @ManyToOne
-//    @JoinColumn(name = "w_id")
-    private Wallet wallet;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<Wallet> wallets;
 
 }
