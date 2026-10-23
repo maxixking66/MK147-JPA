@@ -5,6 +5,7 @@
              version="3.2">
     <persistence-unit name="default">
         <class>ir.maktabsharif.jpa.entities.User</class>
+        <class>ir.maktabsharif.jpa.entities.Wallet</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.url"
