@@ -10,12 +10,7 @@ public class JpaApplication {
         try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("default")) {
             EntityManager em = emf.createEntityManager();
 
-            System.out.println(
-                    em.createQuery("from User u where u.firstname like :fI or lastname = :lI")
-                            .setParameter("fI", "%n%")
-                            .setParameter("lI", "asgari")
-                            .getResultList().size()
-            );
+
         }
     }
 }

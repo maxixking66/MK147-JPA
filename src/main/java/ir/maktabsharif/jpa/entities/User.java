@@ -1,5 +1,6 @@
 package ir.maktabsharif.jpa.entities;
 
+import ir.maktabsharif.jpa.entities.base.BaseDomain;
 import ir.maktabsharif.jpa.entities.enums.Grade;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.time.ZonedDateTime;
 @Setter
 @Getter
 @NoArgsConstructor
-public class User {
+public class User extends BaseDomain<Long> {
 
     public static final String TABLE_NAME = "users";
     public static final String IS_ACTIVE = "is_active";
@@ -33,9 +34,9 @@ public class User {
         this.password = password;
     }
 
-    @Id
-    @GeneratedValue
-    private Long id;
+//    @Id
+//    @GeneratedValue
+//    private Long id;
 
     @Column(length = 50)
     private String firstname;
