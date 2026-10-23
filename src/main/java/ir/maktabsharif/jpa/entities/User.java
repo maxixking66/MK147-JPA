@@ -19,6 +19,7 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User extends BaseDomain<Long> {
 
     public static final String TABLE_NAME = "users";

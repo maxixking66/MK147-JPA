@@ -6,6 +6,7 @@
     <persistence-unit name="default">
         <class>ir.maktabsharif.jpa.entities.User</class>
         <class>ir.maktabsharif.jpa.entities.Wallet</class>
+        <class>ir.maktabsharif.jpa.entities.Customer</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.url"
@@ -13,7 +14,7 @@
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="123456789"/>
 
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="hibernate.show_sql" value="true"/>
         </properties>
     </persistence-unit>
