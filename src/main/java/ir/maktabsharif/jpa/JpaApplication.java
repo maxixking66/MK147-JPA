@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class JpaApplication {
 
@@ -18,13 +19,14 @@ public class JpaApplication {
 
 //            select w.user from Wallet w
 
-//            "select u from User u"
+//            "select u.id from User u"
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
-            CriteriaQuery<User> query = cb.createQuery(User.class);
-            query.from(User.class);
+            CriteriaQuery<Long> query = cb.createQuery(Long.class);
+            Root<User> userRoot = query.from(User.class);
+            query.select(userRoot.get("id"));
 
-            System.out.println(em.createQuery(query).getResultList().size());
+            System.out.println(em.createQuery(query).getResultList());
 
         }
     }
