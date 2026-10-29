@@ -1,12 +1,9 @@
 package ir.maktabsharif.jpa;
 
-import ir.maktabsharif.jpa.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
-
-import java.util.List;
 
 public class JpaApplication {
 
@@ -15,23 +12,27 @@ public class JpaApplication {
             EntityManager em = emf.createEntityManager();
 
             System.out.println("-----------");
-            TypedQuery<User> userTypedQuery = em.createQuery("from User", User.class);
-
-            userTypedQuery.setHint(
-                    "jakarta.persistence.fetchgraph",
-                    em.getEntityGraph(User.USER_WALLET_GRAPH)
+            TypedQuery<Long> typedQuery = em.createQuery("select id from User order by id desc", Long.class);
+            typedQuery.setMaxResults(10);
+            System.out.println(
+                    typedQuery.getResultList()
             );
 
-            List<User> fromUser = userTypedQuery.getResultList();
-            System.out.println("-----------");
-
-            System.out.println(fromUser.size());
-
-            fromUser.stream().map(u -> new UserData(u.getId(), u.getUsername(), u.getWallet().getCash()))
-                    .forEach(System.out::println);
+            System.out.println(
+                    typedQuery.setFirstResult(10)
+                            .getResultList()
+            );
 
         }
     }
+
+//    page = 0
+//    size = 10
+//    offset = page * size -> 0
+
+//    page = 1
+//    size = 10
+//    offset = page * size -> 10
 
     record UserData(Long userId, String username, Long cash) {
 
