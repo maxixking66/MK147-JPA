@@ -19,12 +19,12 @@ public class JpaApplication {
 
 //            select w.user from Wallet w
 
-//            "select u.id from User u"
+//            "select count(u) from User u"
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
             CriteriaQuery<Long> query = cb.createQuery(Long.class);
             Root<User> userRoot = query.from(User.class);
-            query.select(userRoot.get("id"));
+            query.select(cb.count(userRoot));
 
             System.out.println(em.createQuery(query).getResultList());
 
