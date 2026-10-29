@@ -13,15 +13,11 @@ public class JpaApplication {
             EntityManager em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            System.out.println(
-                    em.createQuery("from Customer", Customer.class)
-                            .getResultList().size()
-            );
+            User user = new User("1", "1");
+            em.persist(user);
 
-            System.out.println(
-                    em.createQuery("from User", User.class)
-                            .getResultList().size()
-            );
+            Customer customer = new Customer("2", "2");
+            em.persist(customer);
 
             em.getTransaction().commit();
 

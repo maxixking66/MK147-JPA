@@ -19,7 +19,9 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "entity_type")
+@DiscriminatorValue(value = "us_er")
 public class User extends BaseDomain<Long> {
 
     public static final String TABLE_NAME = "users";
