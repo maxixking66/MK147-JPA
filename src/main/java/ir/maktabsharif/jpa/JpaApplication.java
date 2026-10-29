@@ -1,24 +1,23 @@
 package ir.maktabsharif.jpa;
 
 import ir.maktabsharif.jpa.entities.User;
-import ir.maktabsharif.jpa.entities.Wallet;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+
+import java.util.List;
 
 public class JpaApplication {
 
     static void main() {
         try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("default")) {
             EntityManager em = emf.createEntityManager();
-            em.getTransaction().begin();
 
-            User user = new User("1", "1");
-            Wallet wallet = new Wallet();
-            user.setWallet(wallet);
-            em.persist(user);
+            List<User> resultList = em.createNamedQuery(User.FIND_BY_USERNAME_NAMED_QUERY, User.class)
+                    .setParameter("username", "1")
+                    .getResultList();
 
-            em.getTransaction().commit();
+            System.out.println(resultList.size());
 
 
         }

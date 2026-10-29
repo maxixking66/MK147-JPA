@@ -19,6 +19,11 @@ import java.time.ZonedDateTime;
 @Getter
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@NamedQueries(
+        value = {
+                @NamedQuery(name = User.FIND_BY_USERNAME_NAMED_QUERY, query = "select u from User u where u.username = :username")
+        }
+)
 public class User extends BaseDomain<Long> {
 
     public static final String TABLE_NAME = "users";
@@ -29,6 +34,8 @@ public class User extends BaseDomain<Long> {
     public static final String USERNAME_PASSWORD_INDEX_NAME = "users_username_password_index_name";
     public static final String USERNAME_PASSWORD_INDEX = USERNAME + "," + PASSWORD;
     public static final String POSTAL_CODE = "postal_code";
+
+    public static final String FIND_BY_USERNAME_NAMED_QUERY = "user_by_username";
 
     public User(String username, String password) {
         this.username = username;

@@ -2,6 +2,7 @@ package ir.maktabsharif.jpa.entities;
 
 import ir.maktabsharif.jpa.entities.base.BaseDomain;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Getter;
@@ -20,6 +21,9 @@ public class Wallet extends BaseDomain<Long> {
     private Long cash = 0L;
 
     private Long credit = 0L;
+
+    @OneToOne(mappedBy = "wallet")
+    private User user;
 
     @Transient
     private Long total;
