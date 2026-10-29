@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 @Entity
 @Table(
@@ -20,8 +19,6 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "entity_type")
-@DiscriminatorValue(value = "us_er")
 public class User extends BaseDomain<Long> {
 
     public static final String TABLE_NAME = "users";
@@ -70,8 +67,7 @@ public class User extends BaseDomain<Long> {
     @Embedded
     private Address address;
 
-    @ManyToMany
-    @JoinTable(name = "us_ws", joinColumns = @JoinColumn(name = "u_username", referencedColumnName = "username"), inverseJoinColumns = @JoinColumn(name = "w_id"))
-    private Set<Wallet> wallets;
+    @OneToOne(cascade = {CascadeType.PERSIST})
+    private Wallet wallet;
 
 }
