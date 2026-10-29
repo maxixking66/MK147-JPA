@@ -1,6 +1,7 @@
 package ir.maktabsharif.jpa;
 
 import ir.maktabsharif.jpa.entities.User;
+import ir.maktabsharif.jpa.entities.User_;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -19,12 +20,12 @@ public class JpaApplication {
 
 //            select w.user from Wallet w
 
-//            "select count(u) from User u"
+//            "select u.username from User u"
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
-            CriteriaQuery<Long> query = cb.createQuery(Long.class);
+            CriteriaQuery<String> query = cb.createQuery(String.class);
             Root<User> userRoot = query.from(User.class);
-            query.select(cb.count(userRoot));
+            query.select(userRoot.get(User_.username));
 
             System.out.println(em.createQuery(query).getResultList());
 
