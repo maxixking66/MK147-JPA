@@ -13,9 +13,11 @@ public class JpaApplication {
         try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("default")) {
             EntityManager em = emf.createEntityManager();
 
-            List<User> resultList = em.createNamedQuery(User.FIND_BY_USERNAME_NAMED_QUERY, User.class)
-                    .setParameter("username", "1")
-                    .getResultList();
+//            List<User> resultList = em.createNamedQuery(User.FIND_BY_USERNAME_NAMED_QUERY, User.class)
+//                    .setParameter("username", "1")
+//                    .getResultList();
+
+            List<User> resultList = em.createQuery("from User", User.class).getResultList();
 
             System.out.println(resultList.size());
 

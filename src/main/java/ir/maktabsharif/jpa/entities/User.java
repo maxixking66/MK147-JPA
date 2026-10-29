@@ -74,7 +74,15 @@ public class User extends BaseDomain<Long> {
     @Embedded
     private Address address;
 
-    @OneToOne(cascade = {CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private Wallet wallet;
+
+//    One    ToOne
+//    Many   ToOne
+//    One    ToMany
+//    Many   ToMany
+
+//    ToOne -> EAGER
+//    ToMany -> LAZY
 
 }
