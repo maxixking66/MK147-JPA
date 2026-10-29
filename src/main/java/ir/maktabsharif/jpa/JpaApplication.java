@@ -1,7 +1,10 @@
 package ir.maktabsharif.jpa;
 
 import ir.maktabsharif.jpa.entities.User;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -14,14 +17,9 @@ public class JpaApplication {
             System.out.println("-----------");
             TypedQuery<User> userTypedQuery = em.createQuery("from User", User.class);
 
-            EntityGraph<?> entityGraph = em.createEntityGraph(User.class);
-            entityGraph.addAttributeNode("wallet");
-
-//            jakarta.persistence.fetchgraph
-//            jakarta.persistence.loadgraph -> spring data
-
             userTypedQuery.setHint(
-                    "jakarta.persistence.fetchgraph", entityGraph
+                    "jakarta.persistence.fetchgraph",
+                    em.getEntityGraph(User.USER_WALLET_GRAPH)
             );
 
             List<User> fromUser = userTypedQuery.getResultList();

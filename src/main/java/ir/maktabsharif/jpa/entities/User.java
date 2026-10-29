@@ -24,6 +24,14 @@ import java.time.ZonedDateTime;
                 @NamedQuery(name = User.FIND_BY_USERNAME_NAMED_QUERY, query = "select u from User u where u.username = :username")
         }
 )
+@NamedEntityGraphs(
+        value = {
+                @NamedEntityGraph(
+                        name = User.USER_WALLET_GRAPH,
+                        attributeNodes = {@NamedAttributeNode(value = "wallet")}
+                ),
+        }
+)
 public class User extends BaseDomain<Long> {
 
     public static final String TABLE_NAME = "users";
@@ -36,6 +44,7 @@ public class User extends BaseDomain<Long> {
     public static final String POSTAL_CODE = "postal_code";
 
     public static final String FIND_BY_USERNAME_NAMED_QUERY = "user_by_username";
+    public static final String USER_WALLET_GRAPH = "USER_WALLET_GRAPH";
 
     public User(String username, String password) {
         this.username = username;
