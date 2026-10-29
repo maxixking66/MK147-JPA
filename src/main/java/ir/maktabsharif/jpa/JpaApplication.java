@@ -1,9 +1,7 @@
 package ir.maktabsharif.jpa;
 
 import ir.maktabsharif.jpa.entities.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -14,18 +12,24 @@ public class JpaApplication {
             EntityManager em = emf.createEntityManager();
 
             System.out.println("-----------");
-            List<User> fromUser = em.createQuery("from User", User.class)
-                    .getResultList();
+            TypedQuery<User> userTypedQuery = em.createQuery("from User", User.class);
+
+            EntityGraph<?> entityGraph = em.createEntityGraph(User.class);
+            entityGraph.addAttributeNode("wallet");
+
+//            jakarta.persistence.fetchgraph
+//            jakarta.persistence.loadgraph -> spring data
+
+            userTypedQuery.setHint(
+                    "jakarta.persistence.fetchgraph", entityGraph
+            );
+
+            List<User> fromUser = userTypedQuery.getResultList();
             System.out.println("-----------");
 
             System.out.println(fromUser.size());
 
-            fromUser.stream().map(u -> {
-                        if (u.getId() % 2 == 0) {
-                            return new UserData(u.getId(), u.getUsername(), u.getWallet().getCash());
-                        }
-                        return new UserData(u.getId(), u.getUsername(), -1L);
-                    })
+            fromUser.stream().map(u -> new UserData(u.getId(), u.getUsername(), u.getWallet().getCash()))
                     .forEach(System.out::println);
 
         }
