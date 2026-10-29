@@ -20,12 +20,17 @@ public class JpaApplication {
 
 //            select w.user from Wallet w
 
-//            "select u.username from User u"
+//            "select u.username from User u where u.id= ?"
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
-            CriteriaQuery<String> query = cb.createQuery(String.class);
+            CriteriaQuery<User> query = cb.createQuery(User.class);
             Root<User> userRoot = query.from(User.class);
-            query.select(userRoot.get(User_.username));
+            query.where(
+                    cb.equal(
+                            userRoot.get(User_.id),
+                            50L
+                    )
+            );
 
             System.out.println(em.createQuery(query).getResultList());
 
