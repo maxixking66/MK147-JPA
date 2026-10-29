@@ -1,9 +1,11 @@
 package ir.maktabsharif.jpa;
 
+import ir.maktabsharif.jpa.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 
 public class JpaApplication {
 
@@ -11,17 +13,18 @@ public class JpaApplication {
         try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("default")) {
             EntityManager em = emf.createEntityManager();
 
-            System.out.println("-----------");
-            TypedQuery<Long> typedQuery = em.createQuery("select id from User order by id desc", Long.class);
-            typedQuery.setMaxResults(10);
-            System.out.println(
-                    typedQuery.getResultList()
-            );
+//            em.createQuery("from User", User.class);
+//            em.createQuery("select u.id from User u", Long.class);
 
-            System.out.println(
-                    typedQuery.setFirstResult(10)
-                            .getResultList()
-            );
+//            select w.user from Wallet w
+
+//            "select u from User u"
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+
+            CriteriaQuery<User> query = cb.createQuery(User.class);
+            query.from(User.class);
+
+            System.out.println(em.createQuery(query).getResultList().size());
 
         }
     }
