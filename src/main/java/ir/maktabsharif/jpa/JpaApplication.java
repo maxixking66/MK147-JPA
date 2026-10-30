@@ -4,9 +4,10 @@ import ir.maktabsharif.jpa.entities.User;
 import ir.maktabsharif.jpa.entities.User_;
 import ir.maktabsharif.jpa.entities.Wallet;
 import ir.maktabsharif.jpa.entities.Wallet_;
+import ir.maktabsharif.jpa.repositories.UserRepository;
+import ir.maktabsharif.jpa.utils.ApplicationContext;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,19 +19,14 @@ import java.util.Objects;
 public class JpaApplication {
 
     static void main() {
-        try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("default")) {
-            EntityManager em = emf.createEntityManager();
-
-            UserSearchRequest request = new UserSearchRequest();
-            request.setIsActive(false);
-            request.setFirstname("7");
-            request.setCash(1000L);
+        ApplicationContext ctx = ApplicationContext.getInstance();
+        try {
             System.out.println(
-                    searchOnUsers(
-                            em, request
-                    ).size()
+                    ctx.getBean(UserRepository.class).count()
             );
-
+        } finally {
+            ctx.getBean(EntityManager.class).close();
+            ctx.getBean(EntityManagerFactory.class).close();
         }
     }
 
