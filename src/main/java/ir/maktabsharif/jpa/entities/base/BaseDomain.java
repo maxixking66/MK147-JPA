@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 public abstract class BaseDomain<ID extends Number> {
 
     public static final String CREATED_DATE = "created_date";
+    public static final String LAST_UPDATED_DATE = "last_updated_date";
 
     @Id
     @GeneratedValue
@@ -24,4 +25,7 @@ public abstract class BaseDomain<ID extends Number> {
 
     @Column(name = CREATED_DATE)
     private ZonedDateTime createdDate;
+
+    @Column(name = LAST_UPDATED_DATE)
+    private ZonedDateTime lastUpdatedDate;
 }
