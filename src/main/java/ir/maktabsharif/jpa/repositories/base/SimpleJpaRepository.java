@@ -15,7 +15,7 @@ import java.util.Optional;
 public abstract class SimpleJpaRepository<T extends BaseDomain<ID>, ID extends Number>
         implements JpaRepository<T, ID>, PagingAndSortingRepository<T> {
 
-    private final EntityManager entityManager;
+    protected final EntityManager entityManager;
 
     @Override
     public Optional<T> findById(ID id) {
