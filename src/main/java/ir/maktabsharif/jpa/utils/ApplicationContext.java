@@ -2,6 +2,8 @@ package ir.maktabsharif.jpa.utils;
 
 import ir.maktabsharif.jpa.repositories.UserRepository;
 import ir.maktabsharif.jpa.repositories.UserRepositoryImpl;
+import ir.maktabsharif.jpa.services.UserService;
+import ir.maktabsharif.jpa.services.UserServiceImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -27,10 +29,20 @@ public class ApplicationContext {
     private void initializingBean() {
         registerBean(EntityManagerFactory.class, createEntityManagerFactory());
         registerBean(EntityManager.class, createEntityManager());
+        registerBean(TransactionManager.class, createTransactionManager());
         UserRepositoryImpl userRepository = createUserRepository();
         registerBean(UserRepository.class, userRepository);
         registerBean(UserRepositoryImpl.class, userRepository);
-        registerBean(TransactionManager.class, createTransactionManager());
+        UserServiceImpl userService = createUserService();
+        registerBean(UserService.class, userService);
+        registerBean(UserServiceImpl.class, userService);
+    }
+
+    private UserServiceImpl createUserService() {
+        return new UserServiceImpl(
+                getBean(UserRepository.class),
+                getBean(TransactionManager.class)
+        );
     }
 
     private TransactionManager createTransactionManager() {
@@ -39,7 +51,8 @@ public class ApplicationContext {
 
     private UserRepositoryImpl createUserRepository() {
         return new UserRepositoryImpl(
-                getBean(EntityManager.class)
+                getBean(EntityManager.class),
+                getBean(TransactionManager.class)
         );
     }
 

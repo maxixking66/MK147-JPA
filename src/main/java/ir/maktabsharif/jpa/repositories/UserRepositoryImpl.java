@@ -3,6 +3,7 @@ package ir.maktabsharif.jpa.repositories;
 import ir.maktabsharif.jpa.entities.User;
 import ir.maktabsharif.jpa.entities.User_;
 import ir.maktabsharif.jpa.repositories.base.SimpleJpaRepository;
+import ir.maktabsharif.jpa.utils.TransactionManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -11,8 +12,8 @@ import jakarta.persistence.criteria.Root;
 public class UserRepositoryImpl extends SimpleJpaRepository<User, Long>
         implements UserRepository {
 
-    public UserRepositoryImpl(EntityManager entityManager) {
-        super(entityManager);
+    public UserRepositoryImpl(EntityManager entityManager, TransactionManager transactionManager) {
+        super(entityManager, transactionManager);
     }
 
     @Override

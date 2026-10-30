@@ -1,6 +1,7 @@
 package ir.maktabsharif.jpa.utils;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
@@ -11,13 +12,17 @@ public class TransactionManager {
     private final EntityManager entityManager;
 
     public <T> T execute(Supplier<T> logic) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        if (transaction.isActive()) {
+            return logic.get();
+        }
         T t;
-        entityManager.getTransaction().begin();
+        transaction.begin();
         try {
             t = logic.get();
-            entityManager.getTransaction().commit();
+            transaction.commit();
         } catch (Throwable throwable) {
-            entityManager.getTransaction().rollback();
+            transaction.rollback();
             throw throwable;
         }
         return t;
