@@ -30,6 +30,11 @@ public class ApplicationContext {
         UserRepositoryImpl userRepository = createUserRepository();
         registerBean(UserRepository.class, userRepository);
         registerBean(UserRepositoryImpl.class, userRepository);
+        registerBean(TransactionManager.class, createTransactionManager());
+    }
+
+    private TransactionManager createTransactionManager() {
+        return new TransactionManager(getBean(EntityManager.class));
     }
 
     private UserRepositoryImpl createUserRepository() {

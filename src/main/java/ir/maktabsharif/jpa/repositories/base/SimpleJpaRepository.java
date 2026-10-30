@@ -1,7 +1,7 @@
 package ir.maktabsharif.jpa.repositories.base;
 
 import ir.maktabsharif.jpa.entities.base.BaseDomain;
-import ir.maktabsharif.jpa.utils.TransactionUtils;
+import ir.maktabsharif.jpa.utils.TransactionManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -18,6 +18,8 @@ public abstract class SimpleJpaRepository<T extends BaseDomain<ID>, ID extends N
 
     protected final EntityManager entityManager;
 
+    protected final TransactionManager transactionManager;
+
     @Override
     public Optional<T> findById(ID id) {
         return Optional.ofNullable(
@@ -27,8 +29,8 @@ public abstract class SimpleJpaRepository<T extends BaseDomain<ID>, ID extends N
 
     @Override
     public T save(T t) {
-        return TransactionUtils.execute(
-                entityManager, () -> {
+        return transactionManager.execute(
+                () -> {
                     if (Objects.isNull(t.getId())) {
                         entityManager.persist(t);
                     } else {
@@ -50,8 +52,8 @@ public abstract class SimpleJpaRepository<T extends BaseDomain<ID>, ID extends N
 
     @Override
     public void delete(T t) {
-        TransactionUtils.execute(
-                entityManager, () -> {
+        transactionManager.execute(
+                () -> {
                     entityManager.remove(t);
                     return null;
                 }
