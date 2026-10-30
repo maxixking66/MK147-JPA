@@ -7,7 +7,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,9 +27,7 @@ public abstract class SimpleJpaRepository<T extends BaseDomain<ID>, ID extends N
     @Override
     public T save(T t) {
         entityManager.getTransaction().begin();
-        t.setLastUpdatedDate(ZonedDateTime.now());
         if (Objects.isNull(t.getId())) {
-            t.setCreatedDate(ZonedDateTime.now());
             entityManager.persist(t);
         } else {
             t = entityManager.merge(t);

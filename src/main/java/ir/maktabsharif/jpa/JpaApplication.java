@@ -15,15 +15,22 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class JpaApplication {
 
     static void main() {
         ApplicationContext ctx = ApplicationContext.getInstance();
         try {
+            UserRepository userRepository = ctx.getBean(UserRepository.class);
+            User user = new User("mat1", "mat1");
+            userRepository.save(user);
             System.out.println(
-                    ctx.getBean(UserRepository.class).count()
+                    userRepository.count()
             );
+
+            Optional<User> optionalUser = userRepository.findById(10L);
+
         } finally {
             ctx.getBean(EntityManager.class).close();
             ctx.getBean(EntityManagerFactory.class).close();

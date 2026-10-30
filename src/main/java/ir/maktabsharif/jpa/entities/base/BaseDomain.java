@@ -1,9 +1,6 @@
 package ir.maktabsharif.jpa.entities.base;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,4 +25,25 @@ public abstract class BaseDomain<ID extends Number> {
 
     @Column(name = LAST_UPDATED_DATE)
     private ZonedDateTime lastUpdatedDate;
+
+    @PrePersist
+    public void prePersistOperation() {
+        setCreatedDate(ZonedDateTime.now());
+        setLastUpdatedDate(ZonedDateTime.now());
+    }
+
+    @PreUpdate
+    public void preUpdateOperation() {
+        setLastUpdatedDate(ZonedDateTime.now());
+    }
+
+    @PreRemove
+    public void preRemoveOperation() {
+        System.out.println("pre remove operation");
+    }
+
+    @PostLoad
+    public void postLoadOperation() {
+        System.out.println("post load operation for entity: " + getClass().getSimpleName() + ", id: " + getId());
+    }
 }

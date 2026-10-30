@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.ZonedDateTime;
-
 @Entity
 @Table(
         name = User.TABLE_NAME,
@@ -70,9 +68,6 @@ public class User extends BaseDomain<Long> {
 
     @Column(name = IS_ACTIVE)
     private Boolean isActive;
-
-    @Column(name = LAST_UPDATE_DATE)
-    private ZonedDateTime lastUpdateDate;
 
     @Enumerated(EnumType.STRING)
     private Grade grade;
