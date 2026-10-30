@@ -1,5 +1,6 @@
 package ir.maktabsharif.jpa.entities.base;
 
+import ir.maktabsharif.jpa.entities.PostLoadListener;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.time.ZonedDateTime;
 @Getter
 @NoArgsConstructor
 @MappedSuperclass
+@EntityListeners(value = PostLoadListener.class)
 public abstract class BaseDomain<ID extends Number> {
 
     public static final String CREATED_DATE = "created_date";
@@ -42,8 +44,8 @@ public abstract class BaseDomain<ID extends Number> {
         System.out.println("pre remove operation");
     }
 
-    @PostLoad
-    public void postLoadOperation() {
-        System.out.println("post load operation for entity: " + getClass().getSimpleName() + ", id: " + getId());
-    }
+//    @PostLoad
+//    public void postLoadOperation() {
+//        System.out.println("post load operation for entity: " + getClass().getSimpleName() + ", id: " + getId());
+//    }
 }

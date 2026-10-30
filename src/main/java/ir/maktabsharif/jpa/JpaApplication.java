@@ -23,11 +23,6 @@ public class JpaApplication {
         ApplicationContext ctx = ApplicationContext.getInstance();
         try {
             UserRepository userRepository = ctx.getBean(UserRepository.class);
-            User user = new User("mat1", "mat1");
-            userRepository.save(user);
-            System.out.println(
-                    userRepository.count()
-            );
 
             Optional<User> optionalUser = userRepository.findById(10L);
 
