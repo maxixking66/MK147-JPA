@@ -1,6 +1,7 @@
 package ir.maktabsharif.jpa.repositories.base;
 
 import ir.maktabsharif.jpa.entities.base.BaseDomain;
+import ir.maktabsharif.jpa.utils.TransactionUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -26,14 +27,16 @@ public abstract class SimpleJpaRepository<T extends BaseDomain<ID>, ID extends N
 
     @Override
     public T save(T t) {
-        entityManager.getTransaction().begin();
-        if (Objects.isNull(t.getId())) {
-            entityManager.persist(t);
-        } else {
-            t = entityManager.merge(t);
-        }
-        entityManager.getTransaction().commit();
-        return t;
+        return TransactionUtils.execute(
+                entityManager, () -> {
+                    if (Objects.isNull(t.getId())) {
+                        entityManager.persist(t);
+                    } else {
+                        return entityManager.merge(t);
+                    }
+                    return t;
+                }
+        );
     }
 
     @Override
@@ -47,9 +50,12 @@ public abstract class SimpleJpaRepository<T extends BaseDomain<ID>, ID extends N
 
     @Override
     public void delete(T t) {
-        entityManager.getTransaction().begin();
-        entityManager.remove(t);
-        entityManager.getTransaction().commit();
+        TransactionUtils.execute(
+                entityManager, () -> {
+                    entityManager.remove(t);
+                    return null;
+                }
+        );
     }
 
     @Override
