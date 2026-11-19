@@ -1,27 +1,58 @@
 package ir.maktabsharif.jpa;
 
-import ir.maktabsharif.jpa.entities.User;
-import ir.maktabsharif.jpa.services.UserService;
-import ir.maktabsharif.jpa.utils.ApplicationContext;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-
 public class JpaApplication {
 
-    static void main() {
-        ApplicationContext ctx = ApplicationContext.getInstance();
+    static void main() throws InterruptedException {
+        Thread thread = Thread.currentThread();
+        System.out.println(thread.getName());
+
+
+        long start = System.currentTimeMillis();
+        MyThread thread1 = new MyThread();
+        thread1.start();
+
+        long end = System.currentTimeMillis();
+
+
+        System.out.println(end - start);
+    }
+
+    private static void doTask1() {
+        System.out.println("Task1 in thread name: " + Thread.currentThread().getName());
         try {
-            UserService userService = ctx.getBean(UserService.class);
-            User user = new User("1235", "1235");
-            userService.register(user);
-
-//            UserRepository userRepository = ctx.getBean(UserRepository.class);
-//            User user = new User("1234", "1234");
-//            userRepository.save(user);
-
-        } finally {
-            ctx.getBean(EntityManager.class).close();
-            ctx.getBean(EntityManagerFactory.class).close();
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    private static void doTask2() {
+        System.out.println("Task2");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void doTask3() {
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Task3");
+    }
+}
+
+class MyThread extends Thread {
+
+    public MyThread() {
+        super("myThreadName-" + (int) (Math.random() * 10));
+    }
+
+    @Override
+    public void run() {
+        System.out.println("run method in my thread class, thread name: " + Thread.currentThread().getName());
     }
 }
