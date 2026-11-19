@@ -8,7 +8,7 @@ public class JpaApplication {
 
 
         long start = System.currentTimeMillis();
-        MyThread thread1 = new MyThread();
+        Thread thread1 = new Thread(() -> System.out.println("my custom lambda runnable"));
         thread1.start();
 
         long end = System.currentTimeMillis();
@@ -42,17 +42,5 @@ public class JpaApplication {
             throw new RuntimeException(e);
         }
         System.out.println("Task3");
-    }
-}
-
-class MyThread extends Thread {
-
-    public MyThread() {
-        super("myThreadName-" + (int) (Math.random() * 10));
-    }
-
-    @Override
-    public void run() {
-        System.out.println("run method in my thread class, thread name: " + Thread.currentThread().getName());
     }
 }
