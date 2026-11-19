@@ -1,71 +1,47 @@
 package ir.maktabsharif.jpa;
 
-import java.util.Random;
-
 public class JpaApplication {
 
-    static final Random RAND = new Random();
+    static int counter = 0;
 
     static void main() throws InterruptedException {
-        long start = System.currentTimeMillis();
-        System.out.println(
-                getCustomerDashboard(823746328)
-        );
-        long end = System.currentTimeMillis();
 
-        System.out.println(end - start);
+        Runnable task = () -> {
+            for (int i = 0; i < 100_000; i++) {
+                increment();
+            }
+        };
+//      start task
+//      i = 0;
+//      if i < 100_000 -> true
+//      counter++;
+//        th1
+//      counter = 100_000;
+//      counter = counter + 1;
+//        counter = 100_001
+//        th2
+//      counter = 100_000;
+//      counter = counter + 1;
+//        counter = 100_001
+
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        t1.start();
+        t2.start();
+
+//        Thread.sleep(100000);
+        t1.join();
+        t2.join();
+
+
+        System.out.println(counter);
+
     }
 
-    private static CustomerDashboardData getCustomerDashboard(long customerId) {
-        return new CustomerDashboardData(
-                getNumberOfAccounts(customerId),
-                getChqBookRequests(customerId),
-                getReturnedChqs(customerId),
-                getNumberOfLoans(customerId)
-        );
+    public synchronized static void increment() {
+        counter++;
     }
 
-    private static long getNumberOfAccounts(long customerId) {
-        sleep(RAND.nextLong(500, 5000));
-        return RAND.nextLong(0, 10);
-    }
-
-    private static long getChqBookRequests(long customerId) {
-        sleep(RAND.nextLong(500, 5000));
-        return RAND.nextLong(0, 10);
-    }
-
-    private static long getReturnedChqs(long customerId) {
-        sleep(RAND.nextLong(500, 5000));
-        return RAND.nextLong(0, 10);
-    }
-
-    private static long getNumberOfLoans(long customerId) {
-        sleep(RAND.nextLong(500, 5000));
-        return RAND.nextLong(0, 10);
-    }
-
-    private static CustomerChqBookRequests getData(long customerId) {
-//        this is query
-        long total = RAND.nextLong(0, 10);
-//        this is query
-        long delivered = RAND.nextLong(0, 10);
-        return new CustomerChqBookRequests(total, delivered);
-    }
-
-    private static void sleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-}
-
-record CustomerDashboardData(long numberOfAccounts, long chqBookRequests, long returnedChqs, long numberOfLoans) {
-
-}
-
-record CustomerChqBookRequests(long total, long delivered) {
 
 }
