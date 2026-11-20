@@ -1,5 +1,6 @@
 package ir.maktabsharif.jpa;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -8,14 +9,18 @@ public class JpaApplication {
     static int counter = 0;
 
     static void main() throws InterruptedException {
-
-        Lock lock = new ReentrantLock();
+        Lock lock = new ReentrantLock(true);
 
         Runnable task = () -> {
             for (int i = 0; i < 100_000; i++) {
                 try {
-                    lock.lock();
-                    increment();
+//                    if (!lock.tryLock()) {
+                    if (!lock.tryLock(2, TimeUnit.SECONDS)) {
+                        throw new RuntimeException("lotfan baddan");
+                    }
+                    generateReport();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 } finally {
                     lock.unlock();
                 }
@@ -42,6 +47,9 @@ public class JpaApplication {
         counter++;
     }
 
+    public static void generateReport() {
+
+    }
 
 }
 
