@@ -1,27 +1,26 @@
 package ir.maktabsharif.jpa;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class JpaApplication {
 
     static int counter = 0;
 
     static void main() throws InterruptedException {
 
-        SimpleLock lock = new SimpleLock();
+        Lock lock = new ReentrantLock();
 
         Runnable task = () -> {
-            for (int i = 0; i < 50_000; i++) {
+            for (int i = 0; i < 100_000; i++) {
                 try {
                     lock.lock();
-
-
                     increment();
                 } finally {
                     lock.unlock();
                 }
-
             }
         };
-
 
         Thread t1 = new Thread(task);
         Thread t2 = new Thread(task);
@@ -46,28 +45,3 @@ public class JpaApplication {
 
 }
 
-class SimpleLock {
-    private static int counter = 0;
-    private boolean locked = false;
-
-    public synchronized void lock() {
-        System.out.println(Thread.currentThread().getName() + " try to lock " + counter++);
-        while (locked) {
-            System.out.println(Thread.currentThread().getName() + " wait");
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        System.out.println(Thread.currentThread().getName() + " took lock");
-        locked = true;
-    }
-
-    public synchronized void unlock() {
-        System.out.println(Thread.currentThread().getName() + " try to unlock");
-        locked = false;
-        notify();
-        System.out.println(Thread.currentThread().getName() + " notify one thread");
-    }
-}
