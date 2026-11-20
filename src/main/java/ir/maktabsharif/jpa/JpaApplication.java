@@ -1,38 +1,66 @@
 package ir.maktabsharif.jpa;
 
-import ir.maktabsharif.jpa.utils.SecurityContextHolder;
-
 public class JpaApplication {
 
     static void main() throws InterruptedException {
-        printCurrentUsernameAndLogin("mohsen");
-        Thread first = new Thread(
-                () -> printCurrentUsernameAndLogin("mat"), "first"
+
+        Box box = new Box();
+
+        Thread producer = new Thread(
+                () -> {
+                    for (int i = 1; i <= 5; i++) {
+                        String msg = "message-" + i;
+                        try {
+                            box.put(msg);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        System.out.println("put " + msg);
+                    }
+                },
+                "producer"
         );
-        Thread second = new Thread(
-                () -> printCurrentUsernameAndLogin("asgari"), "second"
+        Thread consumer = new Thread(
+                () -> {
+                    for (int i = 1; i <= 5; i++) {
+                        try {
+                            Thread.sleep(1000);
+                            System.out.println("took " + box.take());
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }, "consumer"
         );
-        first.start();
-        second.start();
 
-        first.join();
-        second.join();
-        System.out.println("current username in thread: " + Thread.currentThread().getName() + " is " + SecurityContextHolder.getUsername());
+        producer.start();
+        consumer.start();
+
+//        producer.join();
+//        consumer.join();
     }
 
-    private static void printCurrentUsernameAndLogin(String username) {
-        System.out.println("current username in thread: " + Thread.currentThread().getName() + " is " + SecurityContextHolder.getUsername());
-        login(username);
-        System.out.println("current username in thread: " + Thread.currentThread().getName() + " is " + SecurityContextHolder.getUsername());
+}
+
+class Box {
+
+    private String item;
+
+    public synchronized void put(String item) throws InterruptedException {
+        while (this.item != null) {
+            this.wait();
+        }
+        this.item = item;
+        notify();
     }
 
-    static void login(String username) {
-//        login logic
-        SecurityContextHolder.setUsername(username);
+    public synchronized String take() throws InterruptedException {
+        while (this.item == null) {
+            wait();
+        }
+        String myItem = this.item;
+        this.item = null;
+        notify();
+        return myItem;
     }
-
-    static String getCurrentUsername() {
-        return SecurityContextHolder.getUsername();
-    }
-
 }
