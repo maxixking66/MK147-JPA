@@ -1,54 +1,38 @@
 package ir.maktabsharif.jpa;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 public class JpaApplication {
 
-    static int counter = 0;
+    static final Object first = new Object(), second = new Object();
 
     static void main() throws InterruptedException {
-        Lock lock = new ReentrantLock(true);
-
-        Runnable task = () -> {
-            for (int i = 0; i < 100_000; i++) {
-                try {
-//                    if (!lock.tryLock()) {
-                    if (!lock.tryLock(2, TimeUnit.SECONDS)) {
-                        throw new RuntimeException("lotfan baddan");
+        new Thread(
+                () -> {
+                    synchronized (first) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        synchronized (second) {
+                            System.out.println("t1 OK");
+                        }
                     }
-                    generateReport();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    lock.unlock();
-                }
-            }
-        };
-
-        Thread t1 = new Thread(task);
-        Thread t2 = new Thread(task);
-        Thread t3 = new Thread(task);
-        t1.start();
-        t2.start();
-        t3.start();
-
-        t1.join();
-        t2.join();
-        t3.join();
-
-
-        System.out.println(counter);
-
-    }
-
-    public static void increment() {
-        counter++;
-    }
-
-    public static void generateReport() {
-
+                }, "t1"
+        ).start();
+        new Thread(
+                () -> {
+                    synchronized (second) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        synchronized (first) {
+                            System.out.println("t2 OK");
+                        }
+                    }
+                }, "t2"
+        ).start();
     }
 
 }
