@@ -2,65 +2,72 @@ package ir.maktabsharif.jpa;
 
 public class JpaApplication {
 
+    static int counter = 0;
+
     static void main() throws InterruptedException {
 
-        Box box = new Box();
+        SimpleLock lock = new SimpleLock();
 
-        Thread producer = new Thread(
-                () -> {
-                    for (int i = 1; i <= 5; i++) {
-                        String msg = "message-" + i;
-                        try {
-                            box.put(msg);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        System.out.println("put " + msg);
-                    }
-                },
-                "producer"
-        );
-        Thread consumer = new Thread(
-                () -> {
-                    for (int i = 1; i <= 5; i++) {
-                        try {
-                            Thread.sleep(1000);
-                            System.out.println("took " + box.take());
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }, "consumer"
-        );
+        Runnable task = () -> {
+            for (int i = 0; i < 50_000; i++) {
+                try {
+                    lock.lock();
 
-        producer.start();
-        consumer.start();
 
-//        producer.join();
-//        consumer.join();
+                    increment();
+                } finally {
+                    lock.unlock();
+                }
+
+            }
+        };
+
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        Thread t3 = new Thread(task);
+        t1.start();
+        t2.start();
+        t3.start();
+
+        t1.join();
+        t2.join();
+        t3.join();
+
+
+        System.out.println(counter);
+
     }
+
+    public static void increment() {
+        counter++;
+    }
+
 
 }
 
-class Box {
+class SimpleLock {
+    private static int counter = 0;
+    private boolean locked = false;
 
-    private String item;
-
-    public synchronized void put(String item) throws InterruptedException {
-        while (this.item != null) {
-            this.wait();
+    public synchronized void lock() {
+        System.out.println(Thread.currentThread().getName() + " try to lock " + counter++);
+        while (locked) {
+            System.out.println(Thread.currentThread().getName() + " wait");
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
-        this.item = item;
-        notify();
+        System.out.println(Thread.currentThread().getName() + " took lock");
+        locked = true;
     }
 
-    public synchronized String take() throws InterruptedException {
-        while (this.item == null) {
-            wait();
-        }
-        String myItem = this.item;
-        this.item = null;
+    public synchronized void unlock() {
+        System.out.println(Thread.currentThread().getName() + " try to unlock");
+        locked = false;
         notify();
-        return myItem;
+        System.out.println(Thread.currentThread().getName() + " notify one thread");
     }
 }
